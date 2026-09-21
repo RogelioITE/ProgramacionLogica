@@ -1,0 +1,172 @@
+# ========================
+# BASE DE DATOS / UNIVERSO
+# ========================
+universo = {
+    #Datos de los alumnos
+    "estudiantes": {   
+        "Valeria":{
+            "No_Control": 23760346,
+            "Inscrito": ["Redes"],
+            "Aprobado":[], #Vacío porque no ha aprobado ninguna materia
+            "Club": None, #Vacío porque no pertenece a ningún club
+            "Beca": "Si",
+            "Tutor": "Torres"
+        },
+        "Mateo":{
+            "No_Control": 23760302,
+            "Inscrito": ["Calculo"],
+            "Aprobado": [],
+            "Club": None,
+            "Beca": "No",
+            "Tutor": None #"None" ya que no tiene tutor asignado
+        },
+        "Sofia":{
+            "No_Control": 23760303,
+            "Inscrito": [], #Vacío [] sin materias asignadas
+            "Aprobado": [],
+            "Club": "Robotica",
+            "Beca": "No",
+            "Tutor": None
+        },
+        "Fernando": {
+                    "No_Control": 23760304,
+                    "Inscrito": [],
+                    "Aprobado": [],
+                    "Club": None,
+                    "Beca": "Si",
+                    "Tutor": None
+        },
+        "Gabriel": {
+            "No_Control": 23760305,
+            "Inscrito": [],
+            "Aprobado": ["BBDD"],
+            "Club": None,
+            "Beca": "No",
+            "Tutor": None
+        }
+    },
+    #Docentes con su númer de empleado y las materias que imparten
+    "docentes": {
+        "Mendoza": {"No_Empleado": 1001, "Imparte": []},
+        "Rivas": {"No_Empleado": 1002, "Imparte": ["Redes"]},
+        "Hernandez": {"No_Empleado": 1003, "Imparte": []},
+        "Torres": {"No_Empleado": 1004, "Imparte": []},
+    },
+
+    #Asignaturas: si estas ocupan laboratorio o no, y en cuál se dan
+    "asignaturas": {
+        "Redes": {
+            "Requiere_Practica": True, #True porque requiere laboratorio
+            "Laboratorio": "Lab_Redes" #Lugar donde se imparte la materia
+        },
+        "BBDD": {
+            "Requiere_Practica": False, #False ya que es teórica
+            "Laboratorio": None #No requiere laboratorio
+        },
+        "Inteligencia_Artificial": {
+            "Requiere_Practica": True, #True ya que si requiere practica
+            "Laboratorio": "Computo_1"
+        }
+    },
+
+    #Instalaciones: laboratorios con su capacidad, clubes y modalidades de titulación
+    "laboratorios": {
+        "Lab_Redes": {"Capacidad": 25},
+        "Computo_1": {"Capacidad": 30},
+        "Lab_Quimica": {"Capacidad": 20}
+    },
+    "clubes": ["Ajedrez","Robotica", "Futbol"],
+    "modalidades_titulacion": ["Tesis", "Residencia", "Promedio"]
+}
+
+#==================================
+#PREDICADOS (Funciones de consulta)
+# =================================
+
+# 1. ¿x es un estudiante registrado?-----------------------------------------------------------------------
+def EsEstudiante(x):
+    for estudiante, datos in universo["estudiantes"].items(): # .items() nos da tanto el nombre (estudiante) como sus datos guardados
+        if estudiante == x:
+            return True   #Si coincide el nombre, confirma que es estudiante
+    return False          #Si recorrió todos y no estuvo, regresa falso
+
+# 2. ¿El maestro x imparte la materia y?---------------------------------------------------------------------
+def Ensena(x, y):
+    for docente, datos in universo["docentes"].items():
+        if docente == x:
+            if y in datos["Imparte"]: #Revisa si la materia 'y' está dentro de la lista "Imparte" del profesor
+                return True
+    return False
+
+# 3. ¿El alumno x cursa la materia y?-------------------------------------------------------------------
+def Inscrito(x, y):
+    for estudiante, datos in universo["estudiantes"].items():
+        if estudiante == x:
+            if y in datos["Inscrito"]: #Checa si la materia 'y' figura en su lista de inscritas
+                return True
+    return False
+
+# 4. ¿El alumno x participa en el club y?--------------------------------------------------------------
+def PerteneceAClub(x, y):
+    for estudiante, datos in universo["estudiantes"].items():
+        if estudiante == x:
+            if datos["Club"] == y: #Compara directamente el club guardado contra el que estamos buscando
+                return True
+    return False
+
+# 5. ¿El alumno x acreditó/aprobó la materia y?-------------------------------------------------------
+def Aprobado(x, y):
+    for estudiante, datos in universo["estudiantes"].items():
+        if estudiante == x:
+            if y in datos["Aprobado"]: #Revisa si la materia está dentro de su lista de aprobadas
+                return True
+    return False
+
+# 6. ¿La asignatura x requiere horas de laboratorio?--------------------------------------------------
+def RequierePractica(x):
+    for asignatura, datos in universo["asignaturas"].items():
+        if asignatura == x:
+            if datos["Requiere_Practica"]: #Si el valor de Requiere_Practica es True, entra al if
+                return True
+    return False
+
+# 7. ¿La asignatura x se imparte en el laboratorio y?-------------------------------------------------
+def OcupaLab(x, y):
+    for asignatura, datos in universo["asignaturas"].items():
+        if asignatura == x:
+            if datos["Laboratorio"] == y: #Compara si el laboratorio registrado coincide exactamente con 'y'
+                return True
+    return False
+
+# =======================================================
+# CONSULTAS (Ejecución de las 14 pruebas Verdadero/Falso)
+# =======================================================
+print("--- PRUEBAS DE CONSULTAS V/F ---")
+
+# 1. EsEstudiante
+print("1. ¿Valeria es estudiante?:", EsEstudiante("Valeria"))
+print("2. ¿Mendoza es estudiante?:", EsEstudiante("Mendoza"))
+
+# 2. Ensena
+print("3. ¿Rivas enseña Redes?:", Ensena("Rivas", "Redes"))
+print("4. ¿Gabriel enseña BBDD?:", Ensena("Gabriel", "BBDD"))
+
+# 3. Inscrito
+print("5. ¿Mateo cursa Cálculo?:", Inscrito("Mateo", "Calculo"))
+print("6. ¿Hernández cursa IA?:", Inscrito("Hernandez", "Inteligencia_Artificial"))
+
+# 4. PerteneceAClub
+print("7. ¿Sofía está en Robótica?:", PerteneceAClub("Sofia", "Robotica"))
+print("8. ¿Fernando está en Tesis?:", PerteneceAClub("Fernando", "Tesis"))
+
+# 5. Aprobado
+print("9. ¿Gabriel aprobó BBDD?:", Aprobado("Gabriel", "BBDD"))
+print("10. ¿Mateo aprobó Lab_Química?:", Aprobado("Mateo", "Lab_Quimica"))
+
+# 6. RequierePractica
+print("11. ¿Redes necesita laboratorio?:", RequierePractica("Redes"))
+print("12. ¿Valeria necesita laboratorio?:", RequierePractica("Valeria"))
+
+# 7. OcupaLab
+print("13. ¿Redes se da en Lab_Redes?:", OcupaLab("Redes", "Lab_Redes"))
+print("14. ¿Cálculo se da en Cómputo 1?:", OcupaLab("Calculo", "Computo_1"))
