@@ -66,6 +66,10 @@ universo = {
         "Inteligencia_Artificial": {
             "Requiere_Practica": True, #True ya que si requiere practica
             "Laboratorio": "Computo_1"
+        },
+        "Calculo": {
+            "Requiere_Practica": False,
+            "Laboratorio": None
         }
     },
 
