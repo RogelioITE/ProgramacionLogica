@@ -1,6 +1,5 @@
 """
 Práctica de Diccionarios y Tuplas - Programación Lógica
-Basado en la Actividad de Adquisición de Conocimiento.
 
 Estructuras utilizadas:
 - Hecho: Tupla (Predicado, Valor) o (Predicado, True)
@@ -113,11 +112,9 @@ CONFUNDIBLES = (
 )
 
 
-def inferir(hechos_iniciales: list) -> tuple[set, list]:
-    """
-    Ejecuta el algoritmo de encadenamiento hacia adelante sobre las reglas.
-    Soporta condiciones afirmativas y negadas ("NO", predicado, valor).
-    """
+def inferir(hechos_iniciales):
+    # Aplica las reglas una y otra vez hasta que ya no salgan hechos nuevos
+    
     hechos = set(hechos_iniciales)
     usadas = []
     cambio = True
